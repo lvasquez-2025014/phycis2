@@ -1,0 +1,134 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  TEACHER
+  STUDENT
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum AssignmentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum RecipientStatus {
+  PENDING
+  SUBMITTED
+  GRADED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(STUDENT)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  createdAssignments   Assignment[]          @relation("TeacherAssignments")
+  assignmentRecipients AssignmentRecipient[]
+
+  @@map("users")
+}
+
+model Topic {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String
+  gradeLevel  String   @default("Diversificado")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  exercises   Exercise[]
+  assignments Assignment[]
+
+  @@map("topics")
+}
+
+model Exercise {
+  id                String     @id @default(uuid())
+  topicId           String
+  topic             Topic      @relation(fields: [topicId], references: [id], onDelete: Restrict)
+  title             String
+  statementTemplate String     @db.Text
+  variablesSchema   Json       // Array de definiciones de variables con rangos min/max/step/unidad
+  defaultDifficulty Difficulty @default(MEDIUM)
+  solverKey         String     // Clave registrada en el motor de física desacoplado
+  diagramUrl        String?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  assignmentExercises AssignmentExercise[]
+
+  @@map("exercises")
+}
+
+model Assignment {
+  id          String           @id @default(uuid())
+  title       String
+  topicId     String
+  topic       Topic            @relation(fields: [topicId], references: [id], onDelete: Restrict)
+  teacherId   String
+  teacher     User             @relation("TeacherAssignments", fields: [teacherId], references: [id], onDelete: Restrict)
+  difficulty  Difficulty       @default(MEDIUM)
+  status      AssignmentStatus @default(DRAFT)
+  dueDate     DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  recipients  AssignmentRecipient[]
+  exercises   AssignmentExercise[]
+
+  @@map("assignments")
+}
+
+model AssignmentRecipient {
+  id           String          @id @default(uuid())
+  assignmentId String
+  assignment   Assignment      @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      User            @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  status       RecipientStatus @default(PENDING)
+  score        Float?
+  submittedAt  DateTime?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  exercises    AssignmentExercise[]
+
+  @@unique([assignmentId, studentId])
+  @@map("assignment_recipients")
+}
+
+model AssignmentExercise {
+  id                String               @id @default(uuid())
+  assignmentId      String
+  assignment        Assignment           @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  recipientId       String?
+  recipient         AssignmentRecipient? @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  exerciseId        String
+  exercise          Exercise             @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+  exerciseNumber    Int
+  statementRendered String               @db.Text
+  generatedValues   Json                 // Valores numéricos exactos generados para esta instancia
+  correctAnswer     Json                 // Resultado y unidades calculadas por el motor de física
+  solutionSteps     Json?                // Pasos de solución para el profesor
+  createdAt         DateTime             @default(now())
+
+  @@map("assignment_exercises")
+}

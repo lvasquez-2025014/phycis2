@@ -1,0 +1,35 @@
+{
+  "name": "fisica-tareas-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "pnpm build:shared && concurrently -n \"API,WEB\" -c \"magenta,cyan\" \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "start": "pnpm dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "build": "pnpm --filter @fisica-tareas/shared build && pnpm --filter backend build && pnpm --filter frontend build",
+    "build:shared": "pnpm --filter @fisica-tareas/shared build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "test": "pnpm --filter backend test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prisma:generate": "pnpm --filter backend prisma:generate",
+    "prisma:migrate": "pnpm --filter backend prisma:migrate"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "concurrently": "^10.0.6",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.25.0"
+  }
+}
