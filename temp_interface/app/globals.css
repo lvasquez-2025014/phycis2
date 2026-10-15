@@ -1,0 +1,119 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-display), var(--font-sans), sans-serif;
+  --font-serif: var(--font-display), sans-serif;
+  --font-mono: var(--font-mono), monospace;
+
+  --color-success: #16a34a;
+  --color-warning: #ea580c;
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+}
+
+:root {
+  color-scheme: light;
+
+  /* ========================================================
+     Identidad Visual y Paleta: "Laboratorio Cuántico"
+     ======================================================== */
+  
+  /* Color de Fondo General: #ECDFD2 (Tono arena/pergamino suave, sólido) */
+  --background: #ECDFD2;
+
+  /* Color Textos Primarios: #2D3250 */
+  --foreground: #2D3250;
+
+  /* Color Tarjeta/Formulario: #FDFBF7 (Blanco marfil sólido) */
+  --card: #FDFBF7;
+  --card-foreground: #2D3250;
+
+  --popover: #FDFBF7;
+  --popover-foreground: #2D3250;
+
+  /* Color Principal (Títulos y Botón Primario): #2D3250 */
+  --primary: #2D3250;
+  --primary-foreground: #FFFFFF;
+
+  /* Color Secundario (Subtítulos, Textos Secundarios): #7077A1 */
+  --secondary: #E4DCD3;
+  --secondary-foreground: #2D3250;
+
+  --muted: #E4DCD3;
+  --muted-foreground: #7077A1;
+
+  /* Color de Acento (Estados Activos / Puntos Focales): #F6B17A (Naranja ámbar cálido) */
+  --accent: #F6B17A;
+  --accent-foreground: #2D3250;
+
+  --destructive: #B91C1C;
+  --destructive-foreground: #FFFFFF;
+
+  /* Color de Bordes: #D5CEBF (Sólido sutil) */
+  --border: #D5CEBF;
+  --input: #D5CEBF;
+  --ring: #2D3250;
+
+  --radius: 0.875rem;
+
+  /* Sidebar Institucional: #2D3250 con estados activos #F6B17A */
+  --sidebar: #2D3250;
+  --sidebar-foreground: #D5CEBF;
+  --sidebar-primary: #F6B17A;
+  --sidebar-primary-foreground: #2D3250;
+  --sidebar-accent: #3A4064;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #3A4064;
+  --sidebar-ring: #F6B17A;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    color: #2D3250;
+  }
+}
